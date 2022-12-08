@@ -1,4 +1,4 @@
-package com.XtramileSolutions.ApplicationTest;
+package com.xtramilesolutions;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
