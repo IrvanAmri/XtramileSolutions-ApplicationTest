@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+.App {
+  text-align: center;
+}
+
 .Home {
   text-align: center;
 }
@@ -28,4 +32,20 @@ td {
 
 p {
   text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  align-items: center;
+  display: inline-flex;
+  margin-left: -2.5em;
+}
+
+li {
+  padding: 1em;
+}
+
+li :focus,
+li :hover {
+  color: red;
 }

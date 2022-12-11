@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Feed from "./Feed";
 
 function Home() {
@@ -10,10 +11,6 @@ function Home() {
     },
   ]);
 
-  const handleAdd = () => {
-    console.log("add");
-  };
-
   const handleDelete = (nim) => {
     console.log("delete: " + nim);
   };
@@ -24,12 +21,9 @@ function Home() {
 
   return (
     <main className="Home">
-      <header>
-        <h1>Student List</h1>
-      </header>
-      <nav>
-        <button onClick={handleAdd}>add student</button>
-      </nav>
+      <div>
+        <Link to={"/add"}>add student</Link>{" "}
+      </div>
       <br />
       <table className="Table1">
         {listStudent.length ? (
