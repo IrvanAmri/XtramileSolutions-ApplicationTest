@@ -1,15 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "./api/axios";
 import Feed from "./Feed";
 
 function Home() {
-  const [listStudent, setListStudent] = useState([
-    {
-      nim: "20/459268/PA/19929",
-      nama: "Irvan Amri H",
-      umur: "21",
-    },
-  ]);
+  const [listStudent, setListStudent] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const getUsers = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get("/api/students");
+        setIsLoading(false);
+        isMounted && setListStudent(response.data.payload);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+      }
+    };
+
+    getUsers();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
 
   const handleDelete = (nim) => {
     console.log("delete: " + nim);
@@ -26,7 +47,11 @@ function Home() {
       </div>
       <br />
       <table className="Table1">
-        {listStudent.length ? (
+        {isLoading ? (
+          <>
+            <p>loading...</p>
+          </>
+        ) : listStudent.length ? (
           <>
             {" "}
             <thead>
