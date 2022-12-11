@@ -18,12 +18,22 @@ public class StudentService {
     }
 
     public ResponseData<Student> addStudent(Student student){
-        Student studentReturn = studentRepo.save(student);
         ResponseData<Student> res = new ResponseData<>();
-        res.setState(true);
-        res.setPayload(studentReturn);
-        res.getMessages().add("success!");
-        return res;
+        if(studentRepo.findById(student.getId()).isPresent()){
+            //send error
+            res.setState(false);
+            res.setPayload(null);
+            res.getMessages().add("student with this id has been registered");
+            return res;
+        }
+        else{
+            //add
+            Student studentReturn = studentRepo.save(student);
+            res.setState(true);
+            res.setPayload(studentReturn);
+            res.getMessages().add("success!");
+            return res;
+        }
     }
 
     public ResponseData<Student> editStudent(Student student){

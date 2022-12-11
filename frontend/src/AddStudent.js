@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import axios from "./api/axios";
 
 const AddStudent = () => {
   const [nim, setNim] = useState();
@@ -7,8 +8,36 @@ const AddStudent = () => {
   const [namaBelakang, setNamaBelakang] = useState();
   const [tanggalLahir, setTanggalLahir] = useState();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    try {
+      const payload = JSON.stringify({
+        id: nim,
+        namaDepan: namaDepan,
+        namaBelakang: namaBelakang,
+        tanggalLahir: tanggalLahir,
+      });
+      setIsLoading(true);
+      const response = await axios.post("/api/students", payload, {
+        headers: {
+          "Content-Type": "Application/json",
+        },
+      });
+      setIsLoading(false);
+      setNim("");
+      setNamaDepan("");
+      setNamaBelakang("");
+      setTanggalLahir({});
+      console.log(response);
+    } catch (error) {
+      setIsLoading(false);
+      setNim("");
+      setNamaDepan("");
+      setNamaBelakang("");
+      setTanggalLahir({});
+      console.log(error);
+    }
   };
 
   return (
@@ -48,7 +77,15 @@ const AddStudent = () => {
         />
       </form>
       <br />
-      <button onClick={handleSubmit}>submit</button>
+      {isLoading ? (
+        <>
+          <p>loading...</p>
+        </>
+      ) : (
+        <>
+          <button onClick={handleSubmit}>submit</button>
+        </>
+      )}
     </main>
   );
 };
