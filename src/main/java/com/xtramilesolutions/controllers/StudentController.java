@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xtramilesolutions.dto.ResponseData;
+import com.xtramilesolutions.dto.StudentData;
 import com.xtramilesolutions.models.Student;
 import com.xtramilesolutions.services.StudentService;
 
@@ -56,8 +57,8 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity<ResponseData<?>> getAllStudent(){
-        List<Student> listStudent = studentService.getAllStudent();
-        ResponseData<List<Student>> res = new ResponseData<>();
+        List<StudentData> listStudent = studentService.getAllStudent();
+        ResponseData<List<StudentData>> res = new ResponseData<>();
         res.setState(true);
         res.setPayload(listStudent);
         return ResponseEntity.ok().body(res);

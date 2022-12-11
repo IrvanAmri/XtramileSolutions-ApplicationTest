@@ -1,10 +1,14 @@
 package com.xtramilesolutions.services;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.xtramilesolutions.dto.ResponseData;
+import com.xtramilesolutions.dto.StudentData;
 import com.xtramilesolutions.models.Student;
 import com.xtramilesolutions.models.StudentRepo;
 
@@ -55,8 +59,19 @@ public class StudentService {
         }
     }
 
-    public List<Student> getAllStudent(){
-        return studentRepo.findAll();
+    public List<StudentData> getAllStudent(){
+        List<StudentData> res = new ArrayList<>();
+        List<Student> students =  studentRepo.findAll();
+        for (Student student : students) {
+            int umur = Period.between(student.getTanggalLahir(), LocalDate.now()).getYears();
+            StudentData data = new StudentData(
+                student.getId(), 
+                student.getNamaDepan()+" "+student.getNamaBelakang(), 
+                umur
+            );
+            res.add(data);
+        }
+        return res;
     }
 
     public ResponseData<?> deleteStudentById(String id){
