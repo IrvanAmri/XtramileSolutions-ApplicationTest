@@ -32,8 +32,17 @@ function Home() {
     };
   }, []);
 
-  const handleDelete = (nim) => {
-    console.log("delete: " + nim);
+  const handleDelete = async (nim) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.delete(`/api/students?nim=${nim}`);
+      const response2 = await axios.get("/api/students");
+      setIsLoading(false);
+      setListStudent(response2.data.payload);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
   };
 
   const handleEdit = (nim) => {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xtramilesolutions.dto.ResponseData;
@@ -65,7 +66,7 @@ public class StudentController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ResponseData<?>> deleteStudent(@RequestBody String id){
+    public ResponseEntity<ResponseData<?>> deleteStudent(@RequestParam("nim") String id){
         ResponseData<?> res = studentService.deleteStudentById(id);
         if(res.isState()){
             //state true
