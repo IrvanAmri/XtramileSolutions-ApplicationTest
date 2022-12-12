@@ -13,4 +13,5 @@ public class StudentData {
     private String nim;
     private String nama;
     private int umur;
+    private int kunci;
 }

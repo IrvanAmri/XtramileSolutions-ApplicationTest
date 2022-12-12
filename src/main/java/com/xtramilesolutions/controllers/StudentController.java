@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,6 +64,16 @@ public class StudentController {
         res.setState(true);
         res.setPayload(listStudent);
         return ResponseEntity.ok().body(res);
+    }
+
+    @GetMapping("/{kunci}")
+    public ResponseEntity<ResponseData<StudentData>> getStudentByKunci(@PathVariable int kunci){
+        StudentData res = studentService.findStudentByKunci(kunci);
+        ResponseData<StudentData> dataRes = new ResponseData<>();
+        dataRes.setState(true);
+        dataRes.getMessages().add("success!");
+        dataRes.setPayload(res);
+        return ResponseEntity.ok().body(dataRes);
     }
 
     @DeleteMapping

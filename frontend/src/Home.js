@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "./api/axios";
 import Feed from "./Feed";
 
@@ -7,6 +7,8 @@ function Home() {
   const [listStudent, setListStudent] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     let isMounted = true;
@@ -45,8 +47,11 @@ function Home() {
     }
   };
 
-  const handleEdit = (nim) => {
+  const handleEdit = (nim, key) => {
     console.log("edit: " + nim);
+    console.log("key: " + key);
+    //navigate to edit
+    navigate("edit/" + key);
   };
 
   return (

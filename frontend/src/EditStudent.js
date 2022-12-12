@@ -1,37 +1,62 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "./api/axios";
 
-const AddStudent = () => {
-  const [nim, setNim] = useState();
-  const [namaDepan, setNamaDepan] = useState();
-  const [namaBelakang, setNamaBelakang] = useState();
-  const [tanggalLahir, setTanggalLahir] = useState();
-
+const EditStudent = () => {
+  const { id } = useParams();
+  const [student, setStudent] = useState({});
+  const [namaDepan, setNamaDepan] = useState("");
+  const [namaBelakang, setNamaBelakang] = useState("");
+  const [tanggalLahir, setTanggalLahir] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const getUser = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(`/api/students/${id}`);
+        setIsLoading(false);
+        isMounted && setStudent(response.data.payload);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+      }
+    };
+
+    getUser();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+
+  const handleSubmitEdit = async () => {
     try {
       const payload = JSON.stringify({
-        id: nim,
+        id: student.nim,
+        kunci: student.kunci,
         namaDepan: namaDepan,
         namaBelakang: namaBelakang,
         tanggalLahir: tanggalLahir,
       });
       setIsLoading(true);
-      const response = await axios.post("/api/students", payload, {
+      const response = await axios.put(`/api/students/`, payload, {
         headers: {
           "Content-Type": "Application/json",
         },
       });
       setIsLoading(false);
-      setNim("");
       setNamaDepan("");
       setNamaBelakang("");
       setTanggalLahir({});
+      navigate("/");
     } catch (error) {
       setIsLoading(false);
-      setNim("");
       setNamaDepan("");
       setNamaBelakang("");
       setTanggalLahir({});
@@ -40,19 +65,12 @@ const AddStudent = () => {
   };
 
   return (
-    <main className="AddStudent">
-      <div>
-        <Link to={"/"}>To Student List</Link>
-      </div>
+    <main>
+      <h3>Student id</h3>
+      <p>{student.nim}</p>
       <br />
+      <h3>Edit form</h3>
       <form>
-        <h4>NIM</h4>
-        <input
-          type="text"
-          required
-          value={nim}
-          onChange={(e) => setNim(e.target.value)}
-        />
         <h4>Nama Depan</h4>
         <input
           type="text"
@@ -82,11 +100,11 @@ const AddStudent = () => {
         </>
       ) : (
         <>
-          <button onClick={handleSubmit}>submit</button>
+          <button onClick={handleSubmitEdit}>submit</button>
         </>
       )}
     </main>
   );
 };
 
-export default AddStudent;
+export default EditStudent;

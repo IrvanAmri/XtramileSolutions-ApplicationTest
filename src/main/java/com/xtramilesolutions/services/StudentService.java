@@ -67,11 +67,23 @@ public class StudentService {
             StudentData data = new StudentData(
                 student.getId(), 
                 student.getNamaDepan()+" "+student.getNamaBelakang(), 
-                umur
+                umur,
+                student.getKunci()
             );
             res.add(data);
         }
         return res;
+    }
+
+    public StudentData findStudentByKunci(int kunci){
+        Student student = studentRepo.findByKunci(kunci).get();
+        int umur = Period.between(student.getTanggalLahir(), LocalDate.now()).getYears();
+        return new StudentData(
+            student.getId(), 
+            student.getNamaDepan()+" "+student.getNamaBelakang(), 
+            umur,
+            student.getKunci()
+        );
     }
 
     public ResponseData<?> deleteStudentById(String id){
