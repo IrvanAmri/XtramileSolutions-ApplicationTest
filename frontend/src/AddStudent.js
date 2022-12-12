@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "./api/axios";
 
@@ -9,6 +9,12 @@ const AddStudent = () => {
   const [tanggalLahir, setTanggalLahir] = useState();
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [errMsg, setErrMsg] = useState("");
+
+  useEffect(() => {
+    setErrMsg("");
+  }, [nim]);
 
   const handleSubmit = async () => {
     try {
@@ -31,10 +37,11 @@ const AddStudent = () => {
       setTanggalLahir({});
     } catch (error) {
       setIsLoading(false);
-      setNim("");
-      setNamaDepan("");
-      setNamaBelakang("");
-      setTanggalLahir({});
+      if (!error.response) {
+        setErrMsg("server not responding");
+      } else {
+        setErrMsg(error.response.data.messages);
+      }
       console.log(error);
     }
   };
@@ -46,6 +53,7 @@ const AddStudent = () => {
       </div>
       <br />
       <form>
+        {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
         <h4>NIM</h4>
         <input
           type="text"
